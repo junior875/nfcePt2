@@ -1,0 +1,312 @@
+projeto-nfce/
+│
+├── backend/                      # API Python/Flask
+│   ├── app/
+│   │   ├── __init__.py          # CRIADO - Configuração inicial do Flask
+│   │   │
+│   │   ├── config/              # CRIADO - Configurações
+│   │   │   ├── __init__.py      # CRIADO - Exporta configurações
+│   │   │   ├── development.py   # CRIADO - Ambiente desenvolvimento
+│   │   │   ├── production.py    # CRIADO - Ambiente produção
+│   │   │   └── testing.py       # CRIADO - Ambiente teste
+│   │   │
+│   │   ├── models/              # PENDENTE - Modelos do banco
+│   │   │   ├── __init__.py      # PENDENTE
+│   │   │   ├── empresa.py       # PENDENTE - Modelo empresa e endereço
+│   │   │   ├── produto.py       # PENDENTE - Modelo produto e tributação
+│   │   │   ├── nota_fiscal.py   # PENDENTE - Modelo NFCe e itens
+│   │   │   └── user.py          # PENDENTE - Modelo usuário
+│   │   │
+│   │   ├── routes/              # CRIADO - Rotas da API
+│   │   │   ├── __init__.py      # CRIADO - Registra blueprints
+│   │   │   ├── auth.py          # CRIADO - Rotas de autenticação
+│   │   │   ├── empresa.py       # CRIADO - Rotas de empresa
+│   │   │   ├── produto.py       # CRIADO - Rotas de produto 
+│   │   │   └── nfce.py          # CRIADO - Rotas de NFCe
+│   │   │
+│   │   ├── services/            # PENDENTE - Regras de negócio
+│   │   │   ├── __init__.py      # PENDENTE
+│   │   │   ├── nuvem_fiscal/    # PENDENTE - Integração Nuvem Fiscal
+│   │   │   │   ├── __init__.py  # PENDENTE
+│   │   │   │   ├── client.py    # PENDENTE - Cliente API
+│   │   │   │   ├── nfce.py      # PENDENTE - Serviço NFCe
+│   │   │   │   └── utils.py     # PENDENTE - Utilitários API
+│   │   │   ├── auth.py          # PENDENTE - Autenticação
+│   │   │   └── email.py         # PENDENTE - Emails
+│   │   │
+│   │   ├── utils/               # PENDENTE - Funções auxiliares 
+│   │   │   ├── __init__.py      # PENDENTE
+│   │   │   ├── validators.py    # PENDENTE - Validações
+│   │   │   ├── formatters.py    # PENDENTE - Formatações
+│   │   │   └── crypto.py        # PENDENTE - Criptografia
+│   │   │
+│   │   └── templates/           # PENDENTE - Templates HTML/PDF
+│
+├── database/                     # CRIADO - Banco de dados
+│   ├── migrations/              # CRIADO - Migrações (vazio)
+│   └── app.db                   # PENDENTE - Arquivo SQLite
+│
+├── storage/                      # CRIADO - Arquivos
+│   ├── certificados/            # CRIADO - Certificados A1 (vazio)
+│   ├── xml/                     # CRIADO - XMLs das notas
+│   │   ├── enviadas/           # CRIADO - XMLs enviados (vazio)
+│   │   ├── autorizadas/        # CRIADO - XMLs autorizados (vazio)
+│   │   └── rejeitadas/         # CRIADO - XMLs rejeitados (vazio)
+│   └── pdfs/                    # CRIADO - DANFEs gerados (vazio)
+│
+├── frontend/                     # CRIADO - Interface React
+│   ├── public/                  # CRIADO - Arquivos públicos
+│   │   └── index.html          # CRIADO - HTML base
+│   │
+│   ├── src/                     # CRIADO - Código fonte React
+│   │   ├── components/         # PENDENTE - Componentes
+│   │   │   ├── common/         # PENDENTE - Reutilizáveis
+│   │   │   │   ├── Button.js   # PENDENTE - Botão padrão
+│   │   │   │   ├── Input.js    # PENDENTE - Input padrão
+│   │   │   │   └── Modal.js    # PENDENTE - Modal padrão
+│   │   │   │
+│   │   │   ├── layout/        # PENDENTE - Layout
+│   │   │   │   ├── Header.js  # PENDENTE - Cabeçalho
+│   │   │   │   ├── Sidebar.js # PENDENTE - Menu lateral
+│   │   │   │   └── Footer.js  # PENDENTE - Rodapé
+│   │   │   │
+│   │   │   ├── empresa/       # PENDENTE - Empresa
+│   │   │   │   ├── Form.js    # PENDENTE - Formulário
+│   │   │   │   └── List.js    # PENDENTE - Listagem
+│   │   │   │
+│   │   │   ├── produto/      # PENDENTE - Produtos
+│   │   │   │   ├── Form.js   # PENDENTE - Formulário
+│   │   │   │   └── List.js   # PENDENTE - Listagem
+│   │   │   │
+│   │   │   └── nfce/        # PENDENTE - NFCe
+│   │   │       ├── Emissao/  # PENDENTE - Emissão
+│   │   │       └── Consulta/ # PENDENTE - Consulta
+│   │   │
+│   │   ├── contexts/        # PENDENTE - Contextos React
+│   │   │   ├── Auth.js      # PENDENTE - Autenticação
+│   │   │   └── NFCe.js      # PENDENTE - Estado NFCe
+│   │   │
+│   │   ├── hooks/          # PENDENTE - Hooks personalizados
+│   │   │   ├── useAuth.js  # PENDENTE - Hook autenticação
+│   │   │   └── useNFCe.js  # PENDENTE - Hook NFCe
+│   │   │
+│   │   ├── services/       # PENDENTE - Chamadas API
+│   │   │   ├── api.js      # PENDENTE - Config Axios
+│   │   │   ├── empresa.js  # PENDENTE - API empresa
+│   │   │   ├── produto.js  # PENDENTE - API produto
+│   │   │   └── nfce.js     # PENDENTE - API NFCe
+│   │   │
+│   │   ├── utils/          # PENDENTE - Utilitários
+│   │   │   ├── format.js   # PENDENTE - Formatações
+│   │   │   ├── validate.js # PENDENTE - Validações
+│   │   │   └── mask.js     # PENDENTE - Máscaras
+│   │   │
+│   │   ├── styles/         # PENDENTE - Estilos
+│   │   │   ├── global.css  # PENDENTE - CSS global
+│   │   │   └── theme.js    # PENDENTE - Tema MUI
+│   │   │
+│   │   ├── pages/          # PENDENTE - Páginas
+│   │   │   ├── Login/      # PENDENTE - Login
+│   │   │   ├── Dashboard/  # PENDENTE - Dashboard
+│   │   │   ├── Empresa/    # PENDENTE - Empresa
+│   │   │   ├── Produtos/   # PENDENTE - Produtos
+│   │   │   └── NFCe/       # PENDENTE - NFCe
+│   │   │
+│   │   ├── App.js          # CRIADO - Componente principal
+│   │   └── index.js        # CRIADO - Entrada React
+│   │
+│   ├── package.json        # CRIADO - Dependências
+│   ├── webpack.config.js   # CRIADO - Config Webpack
+│   └── .babelrc           # CRIADO - Config Babel
+│
+├── tests/                  # PENDENTE - Testes
+│   ├── __init__.py        # PENDENTE
+│   ├── test_models/       # PENDENTE - Testes modelos
+│   ├── test_routes/       # PENDENTE - Testes rotas
+│   └── test_services/     # PENDENTE - Testes serviços
+│
+├── logs/                   # PENDENTE - Logs
+│   ├── app.log            # PENDENTE - Log aplicação
+│   └── nfce.log           # PENDENTE - Log NFCe
+│
+├── docs/                   # PENDENTE - Documentação
+│   ├── api/               # PENDENTE - Doc API
+│   ├── setup/             # PENDENTE - Doc instalação
+│   └── deployment/        # PENDENTE - Doc deploy
+│
+├── .env                    # CRIADO - Variáveis ambiente
+├── .gitignore             # PENDENTE - Ignore Git
+├── README.md              # PENDENTE - Documentação
+├── requirements.txt       # PENDENTE - Dependências Python
+└── run.py                 # CRIADO - Inicialização
+
+RESUMO PROJETO NFCe - STATUS ATUAL E PENDÊNCIAS
+
+1. ESTRUTURA ATUAL DO PROJETO
+=================================
+prototipo/
+├── backend/                      # API Python/Flask
+├── frontend/                     # React Frontend
+├── database/                    # SQLite Database
+├── storage/                     # Arquivos de sistema
+└── docs/                        # Documentação
+
+2. BACKEND - STATUS
+=================================
+FUNCIONANDO:
+- Servidor Flask rodando na porta 5000
+- Estrutura básica de rotas criada
+- Configurações de ambiente (development, production, testing)
+- SQLite configurado
+
+ARQUIVOS CRIADOS E FUNCIONANDO:
+- backend/app/__init__.py
+- backend/app/config/*.py 
+- backend/app/routes/*.py (auth.py, empresa.py, produto.py, nfce.py)
+- run.py
+
+ROTAS IMPLEMENTADAS (BÁSICAS):
+- /api/auth/login
+- /api/empresa
+- /api/produtos
+- /api/nfce
+
+3. FRONTEND - STATUS
+=================================
+FUNCIONANDO:
+- Servidor React rodando na porta 3001
+- Estrutura básica criada manualmente (sem create-react-app)
+- Webpack e Babel configurados
+
+ARQUIVOS CRIADOS E FUNCIONANDO:
+- frontend/src/index.js
+- frontend/src/App.js
+- frontend/public/index.html
+- frontend/webpack.config.js
+- frontend/.babelrc
+- frontend/package.json
+
+4. PENDÊNCIAS PRINCIPAIS
+=================================
+
+4.1 BACKEND PENDÊNCIAS:
+----------------------
+MODELS (Criar):
+- backend/app/models/empresa.py
+- backend/app/models/produto.py
+- backend/app/models/nota_fiscal.py
+- backend/app/models/user.py
+
+SERVIÇOS (Criar):
+- backend/app/services/nuvem_fiscal/client.py
+- backend/app/services/nuvem_fiscal/nfce_service.py
+- backend/app/services/auth_service.py
+- backend/app/services/email_service.py
+
+UTILS (Criar):
+- backend/app/utils/validators.py
+- backend/app/utils/formatters.py
+- backend/app/utils/crypto.py
+
+4.2 FRONTEND PENDÊNCIAS:
+----------------------
+COMPONENTES:
+- Header
+- Sidebar
+- Footer
+- Formulários (Input, Button, etc)
+- Modal
+
+PÁGINAS:
+- Login
+- Dashboard
+- Cadastro de Empresa
+- Configuração de Certificado
+- Cadastro de Produtos
+- Emissão NFCe
+- Consulta NFCe
+
+SERVIÇOS:
+- API client
+- Autenticação
+- Integração com backend
+
+5. FUNCIONALIDADES A IMPLEMENTAR
+=================================
+1. Autenticação de usuários
+2. CRUD de empresas
+3. Upload e gestão de certificados A1
+4. CRUD de produtos
+5. Emissão de NFCe
+6. Consulta de NFCe
+7. Cancelamento de NFCe
+8. Relatórios
+9. Gestão de usuários
+10. Integração com Nuvem Fiscal
+
+6. COMO ESTÁ FUNCIONANDO
+=================================
+BACKEND:
+- Servidor: python run.py
+- Endereço: http://localhost:5000
+- Status: Rodando com rotas básicas sem implementação
+
+FRONTEND:
+- Servidor: npm start
+- Endereço: http://localhost:3001
+- Status: Página básica funcionando
+
+7. PRÓXIMOS PASSOS RECOMENDADOS
+=================================
+1. Implementar models do backend
+2. Criar migrations do banco
+3. Desenvolver serviço da Nuvem Fiscal
+4. Implementar autenticação
+5. Criar componentes base do frontend
+6. Desenvolver páginas principais
+7. Integrar frontend com backend
+
+8. DEPENDÊNCIAS INSTALADAS
+=================================
+BACKEND:
+- Flask
+- Flask-SQLAlchemy
+- Flask-Migrate
+- Flask-Cors
+- Flask-JWT-Extended
+- python-dotenv
+
+FRONTEND:
+- React
+- React-DOM
+- @mui/material
+- @emotion/react
+- @emotion/styled
+- axios
+- webpack
+- babel
+
+9. COMANDOS IMPORTANTES
+=================================
+BACKEND:
+```bash
+python run.py  # Iniciar servidor
+
+
+FRONT END
+
+npm start     # Iniciar desenvolvimento
+npm run build # Build de produção
+
+OBSERVAÇÕES IMPORTANTES
+=================================
+
+
+Backend e Frontend estão com estrutura básica funcionando
+Banco de dados está configurado mas sem tabelas
+Nenhuma integração real com a Nuvem Fiscal
+Autenticação não implementada
+Necessário implementar todas as funcionalidades CRUD
+Frontend precisa de toda a parte visual e funcional
+
+Este resumo contém todo o estado atual do projeto, o que foi feito e o que falta fazer. Pode ser usado como referência para continuar o desenvolvimento ou passar para outro desenvolvedor/IA continuar o trabalho.

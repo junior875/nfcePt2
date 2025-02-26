@@ -30,7 +30,7 @@ def test_upload_certificado():
     
     # Envia o certificado para a API
     with open(CERTIFICADO_PATH, 'rb') as file:
-        files = {'file': file}
+        files = {'file': (os.path.basename(CERTIFICADO_PATH), file)}
         data = {'senha': SENHA_CERTIFICADO}
         response = requests.put(f"{base_url}/certificado/{CNPJ}/certificado", files=files, data=data)
     

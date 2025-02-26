@@ -1,118 +1,214 @@
 import os
+import csv
 import requests
-from typing import Optional, Dict
-from flask import current_app
+from dotenv import load_dotenv
+import logging
+import json
+import requests
+import logging
+
+# Configurar logger
+logger = logging.getLogger(__name__)
 
 class NuvemFiscalClient:
+    """Cliente para comunicação com a API da Nuvem Fiscal"""
+    
     def __init__(self):
-        self.base_url = os.getenv('NUVEM_FISCAL_BASE_URL', 'https://api.nuvemfiscal.com.br/v2')
-        self.auth_url = "https://auth.nuvemfiscal.com.br/oauth/token"
+        """Inicializa o cliente com as credenciais carregadas do .env ou arquivo CSV"""
+        # Carregar variáveis de ambiente
+        load_dotenv()
+        
+        # Tentar obter credenciais do ambiente
         self.client_id = os.getenv('NUVEM_FISCAL_CLIENT_ID')
         self.client_secret = os.getenv('NUVEM_FISCAL_CLIENT_SECRET')
+        
+        # Se não encontrar no ambiente, tentar carregar do arquivo CSV
+        if not self.client_id or not self.client_secret:
+            self._load_credentials_from_csv()
+            
+        # Definir URLs base
+        self.auth_base_url = "https://auth.nuvemfiscal.com.br"
+        self.api_base_url = "https://api.nuvemfiscal.com.br"
+        
+        # Inicializar token de acesso
         self.access_token = None
-
-    def authenticate(self) -> None:
-        """Realiza a autenticação OAuth e obtém o token de acesso"""
+        
+    def _load_credentials_from_csv(self):
+        """Carrega credenciais do arquivo CSV"""
         try:
+            csv_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                    'NuvemFiscal_credentials.csv')
+            
+            with open(csv_path, 'r') as file:
+                csv_reader = csv.DictReader(file)
+                credentials = next(csv_reader)
+                self.client_id = credentials.get('Client ID')
+                self.client_secret = credentials.get('Client Secret')
+                
+            if not self.client_id or not self.client_secret:
+                raise ValueError("Credenciais não encontradas no arquivo CSV")
+                
+        except Exception as e:
+            logger.error(f"Erro ao carregar credenciais do CSV: {str(e)}")
+            raise ValueError(f"Não foi possível carregar as credenciais da Nuvem Fiscal: {str(e)}")
+    
+    def authenticate(self):
+        """Realiza autenticação OAuth2 e obtém token de acesso"""
+        try:
+            auth_url = f"{self.auth_base_url}/oauth/token"
+            
             payload = {
                 'grant_type': 'client_credentials',
-                'scope': 'cnpj'
+                'scope': 'empresa cnpj nfe'  # Escopos necessários para a API
             }
             
             response = requests.post(
-                self.auth_url,
+                auth_url,
                 auth=(self.client_id, self.client_secret),
                 data=payload
             )
+            
             response.raise_for_status()
-            self.access_token = response.json()['access_token']
-            current_app.logger.info("Autenticação NuvemFiscal realizada com sucesso")
+            auth_data = response.json()
+            self.access_token = auth_data['access_token']
+            
+            logger.info("Autenticação na Nuvem Fiscal realizada com sucesso")
+            return self.access_token
+            
         except requests.exceptions.RequestException as e:
-            current_app.logger.error(f"Erro na autenticação NuvemFiscal: {str(e)}")
-            raise Exception("Falha na autenticação com a NuvemFiscal")
-
-    def get_headers(self) -> Dict:
+            logger.error(f"Erro na autenticação com a Nuvem Fiscal: {str(e)}")
+            raise Exception(f"Falha na autenticação com a Nuvem Fiscal: {str(e)}")
+    
+    def get_headers(self):
         """Retorna os headers com o token de autenticação"""
         if not self.access_token:
             self.authenticate()
-        
+            
         return {
             "Authorization": f"Bearer {self.access_token}",
             "Content-Type": "application/json"
         }
-
-    def consultar_cnpj(self, cnpj: str) -> Optional[Dict]:
-        """
-        Consulta informações de uma empresa pelo CNPJ
-        
-        Args:
-            cnpj (str): CNPJ da empresa (com ou sem formatação)
-            
-        Returns:
-            Dict: Dados da empresa ou None em caso de erro
-        """
+    
+    def consultar_cnpj(self, cnpj):
+        """Consulta informações de uma empresa pelo CNPJ"""
         try:
             # Remove caracteres especiais do CNPJ
             cnpj_limpo = ''.join(filter(str.isdigit, cnpj))
             
-            if len(cnpj_limpo) != 14:
-                raise ValueError("CNPJ inválido")
-
-            url = f"{self.base_url}/cnpj/{cnpj_limpo}"
-            
+            url = f"{self.api_base_url}/cnpj/{cnpj_limpo}"
             response = requests.get(url, headers=self.get_headers())
             
-            # Se der erro 401, tenta reautenticar uma vez
+            # Verifica se o token expirou (401) e tenta novamente
             if response.status_code == 401:
                 self.authenticate()
                 response = requests.get(url, headers=self.get_headers())
             
             response.raise_for_status()
             return response.json()
-
+            
         except requests.exceptions.RequestException as e:
-            current_app.logger.error(f"Erro ao consultar CNPJ {cnpj}: {str(e)}")
-            return None
-        except ValueError as e:
-            current_app.logger.error(f"CNPJ inválido {cnpj}: {str(e)}")
-            return None
-
-    def formatar_endereco(self, dados_empresa: Dict) -> Dict:
-        """
-        Formata os dados de endereço retornados pela API
-        
-        Args:
-            dados_empresa (Dict): Dados brutos retornados pela API
+            logger.error(f"Erro ao consultar CNPJ {cnpj}: {str(e)}")
+            if hasattr(e, 'response') and e.response is not None:
+                logger.error(f"Resposta da API: {e.response.text}")
+            raise Exception(f"Erro ao consultar CNPJ: {str(e)}")
+    
+    def cadastrar_empresa(self, dados_empresa):
+        """Cadastra uma nova empresa na Nuvem Fiscal."""
+        try:
+            url = f"{self.api_base_url}/empresas"
+            headers = self.get_headers()
             
-        Returns:
-            Dict: Dados formatados do endereço
-        """
-        endereco = dados_empresa.get('endereco', {})
-        return {
-            'cep': endereco.get('cep', ''),
-            'logradouro': endereco.get('logradouro', ''),
-            'numero': endereco.get('numero', ''),
-            'complemento': endereco.get('complemento', ''),
-            'bairro': endereco.get('bairro', ''),
-            'cidade': endereco.get('municipio', {}).get('nome', ''),
-            'uf': endereco.get('uf', '')
-        }
-
-    def formatar_dados_empresa(self, dados: Dict) -> Dict:
-        """
-        Formata os dados da empresa retornados pela API
-        
-        Args:
-            dados (Dict): Dados brutos retornados pela API
+            # Log do payload para depuração
+            logger.debug(f"Payload enviado para Nuvem Fiscal: {json.dumps(dados_empresa, indent=2)}")
             
-        Returns:
-            Dict: Dados formatados da empresa
-        """
-        return {
-            'cnpj': dados.get('cnpj', ''),
-            'razao_social': dados.get('razao_social', ''),
-            'nome_fantasia': dados.get('nome_fantasia', ''),
-            'email': dados.get('email', ''),
-            'telefone': dados.get('telefone', {}).get('numero', ''),
-            'endereco': self.formatar_endereco(dados)
-        }
+            # Enviar requisição POST
+            response = requests.post(url, headers=headers, json=dados_empresa)
+            
+            # Verificar se o token expirou (401) e tentar novamente
+            if response.status_code == 401:
+                self.authenticate()
+                response = requests.post(url, headers=headers, json=dados_empresa)
+            
+            # Levantar exceção para erros HTTP
+            response.raise_for_status()
+            
+            # Log da resposta da API
+            logger.debug(f"Resposta da Nuvem Fiscal: {response.text}")
+            
+            return response.json()
+            
+        except requests.exceptions.HTTPError as e:
+            logger.error(f"Erro ao cadastrar empresa: {e.response.text}")
+            raise
+        except Exception as e:
+            logger.error(f"Erro inesperado ao cadastrar empresa: {str(e)}")
+            raise
+    
+    def atualizar_empresa(self, cpf_cnpj, dados_empresa):
+        """Atualiza uma empresa existente na Nuvem Fiscal"""
+        try:
+            # Remove caracteres especiais do CNPJ
+            cnpj_limpo = ''.join(filter(str.isdigit, cpf_cnpj))
+            
+            url = f"{self.api_base_url}/empresas/{cnpj_limpo}"
+            response = requests.put(url, headers=self.get_headers(), json=dados_empresa)
+            
+            # Verifica se o token expirou (401) e tenta novamente
+            if response.status_code == 401:
+                self.authenticate()
+                response = requests.put(url, headers=self.get_headers(), json=dados_empresa)
+            
+            response.raise_for_status()
+            return response.json()
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Erro ao atualizar empresa {cpf_cnpj}: {str(e)}")
+            if hasattr(e, 'response') and e.response is not None:
+                logger.error(f"Resposta da API: {e.response.text}")
+            raise Exception(f"Erro ao atualizar empresa: {str(e)}")
+    
+    def consultar_empresa(self, cpf_cnpj):
+        """Consulta uma empresa cadastrada na Nuvem Fiscal"""
+        try:
+            # Remove caracteres especiais do CNPJ
+            cnpj_limpo = ''.join(filter(str.isdigit, cpf_cnpj))
+            
+            url = f"{self.api_base_url}/empresas/{cnpj_limpo}"
+            response = requests.get(url, headers=self.get_headers())
+            
+            # Verifica se o token expirou (401) e tenta novamente
+            if response.status_code == 401:
+                self.authenticate()
+                response = requests.get(url, headers=self.get_headers())
+            
+            response.raise_for_status()
+            return response.json()
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Erro ao consultar empresa {cpf_cnpj}: {str(e)}")
+            if hasattr(e, 'response') and e.response is not None:
+                logger.error(f"Resposta da API: {e.response.text}")
+            raise Exception(f"Erro ao consultar empresa: {str(e)}")
+    
+    def excluir_empresa(self, cpf_cnpj):
+        """Exclui uma empresa cadastrada na Nuvem Fiscal"""
+        try:
+            # Remove caracteres especiais do CNPJ
+            cnpj_limpo = ''.join(filter(str.isdigit, cpf_cnpj))
+            
+            url = f"{self.api_base_url}/empresas/{cnpj_limpo}"
+            response = requests.delete(url, headers=self.get_headers())
+            
+            # Verifica se o token expirou (401) e tenta novamente
+            if response.status_code == 401:
+                self.authenticate()
+                response = requests.delete(url, headers=self.get_headers())
+            
+            response.raise_for_status()
+            return True
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Erro ao excluir empresa {cpf_cnpj}: {str(e)}")
+            if hasattr(e, 'response') and e.response is not None:
+                logger.error(f"Resposta da API: {e.response.text}")
+            raise Exception(f"Erro ao excluir empresa: {str(e)}")

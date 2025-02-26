@@ -1,12 +1,25 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token
 
-auth_bp = Blueprint('auth', __name__)
+# Criar blueprint
+auth_bp = Blueprint('auth', __name__, url_prefix='/api/auth')
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
-    return jsonify({'message': 'Login endpoint'})
+    """
+    Rota de login (básica, a ser implementada)
+    """
+    return jsonify({"mensagem": "Funcionalidade de login a ser implementada"}), 200
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
-    return jsonify({'message': 'Register endpoint'})
+    """
+    Rota de registro (básica, a ser implementada)
+    """
+    return jsonify({"mensagem": "Funcionalidade de registro a ser implementada"}), 200
+
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    """
+    Rota de logout (básica, a ser implementada)
+    """
+    return jsonify({"mensagem": "Funcionalidade de logout a ser implementada"}), 200

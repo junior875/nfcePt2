@@ -1,22 +1,29 @@
-# backend/app/config/development.py
 import os
+from pathlib import Path
 
 class DevelopmentConfig:
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../../database/app.db')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = 'dev-secret-key'
-    JWT_SECRET_KEY = 'jwt-secret-key-dev'
+    """Configuração para ambiente de desenvolvimento"""
     
-    # Configurações da Nuvem Fiscal
-    NUVEM_FISCAL_API_KEY = os.getenv('NUVEM_FISCAL_API_KEY')
-    NUVEM_FISCAL_BASE_URL = 'https://api.nuvemfiscal.com.br/v2'
+    # Configurações gerais
+    DEBUG = True
+    TESTING = False
+    SECRET_KEY = os.getenv('SECRET_KEY', 'development_secret_key')
+    
+    # Configurações do banco de dados
+    basedir = Path(__file__).resolve().parents[3]
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', f'sqlite:///{basedir}/database/app.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Configurações de armazenamento
-    UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../../storage')
-    CERTIFICADOS_FOLDER = os.path.join(UPLOAD_FOLDER, 'certificados')
-    XML_FOLDER = os.path.join(UPLOAD_FOLDER, 'xml')
+    STORAGE_PATH = os.path.join(basedir, 'storage')
+    CERTIFICADOS_PATH = os.path.join(STORAGE_PATH, 'certificados')
+    XML_PATH = os.path.join(STORAGE_PATH, 'xml')
+    PDF_PATH = os.path.join(STORAGE_PATH, 'pdfs')
     
-    @staticmethod
-    def init_app(app):
-        pass
+    # Diretórios para XMLs
+    XML_ENVIADAS_PATH = os.path.join(XML_PATH, 'enviadas')
+    XML_AUTORIZADAS_PATH = os.path.join(XML_PATH, 'autorizadas')
+    XML_REJEITADAS_PATH = os.path.join(XML_PATH, 'rejeitadas')
+    
+    # Configurações de logging
+    LOG_LEVEL = 'DEBUG'

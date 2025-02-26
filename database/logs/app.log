@@ -1,0 +1,28 @@
+2025-02-25 14:25:58,427 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:64]
+2025-02-25 14:25:59,800 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:64]
+2025-02-25 15:12:56,465 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in c:\prototipo\backend\app\services\nuvem_fiscal\client.py:72]
+2025-02-25 15:12:59,015 ERROR: Erro ao buscar empresa por CNPJ 06626253000151: (sqlite3.OperationalError) no such column: empresas.cpf_cnpj
+[SQL: SELECT empresas.id AS empresas_id, empresas.cpf_cnpj AS empresas_cpf_cnpj, empresas.inscricao_estadual AS empresas_inscricao_estadual, empresas.inscricao_municipal AS empresas_inscricao_municipal, empresas.nome_razao_social AS empresas_nome_razao_social, empresas.nome_fantasia AS empresas_nome_fantasia, empresas.email AS empresas_email, empresas.telefone AS empresas_telefone, empresas.data_cadastro AS empresas_data_cadastro, empresas.ativo AS empresas_ativo 
+FROM empresas 
+WHERE empresas.cpf_cnpj = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('06626253000151', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) [in c:\prototipo\backend\app\services\empresa_service.py:144]
+2025-02-25 15:12:59,016 ERROR: Erro ao criar empresa: (sqlite3.OperationalError) no such column: empresas.cpf_cnpj
+[SQL: SELECT empresas.id AS empresas_id, empresas.cpf_cnpj AS empresas_cpf_cnpj, empresas.inscricao_estadual AS empresas_inscricao_estadual, empresas.inscricao_municipal AS empresas_inscricao_municipal, empresas.nome_razao_social AS empresas_nome_razao_social, empresas.nome_fantasia AS empresas_nome_fantasia, empresas.email AS empresas_email, empresas.telefone AS empresas_telefone, empresas.data_cadastro AS empresas_data_cadastro, empresas.ativo AS empresas_ativo 
+FROM empresas 
+WHERE empresas.cpf_cnpj = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('06626253000151', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) [in c:\prototipo\backend\app\routes\empresa.py:106]
+2025-02-25 15:13:01,044 ERROR: Erro ao listar empresas: (sqlite3.OperationalError) no such column: empresas.cpf_cnpj
+[SQL: SELECT empresas.id AS empresas_id, empresas.cpf_cnpj AS empresas_cpf_cnpj, empresas.inscricao_estadual AS empresas_inscricao_estadual, empresas.inscricao_municipal AS empresas_inscricao_municipal, empresas.nome_razao_social AS empresas_nome_razao_social, empresas.nome_fantasia AS empresas_nome_fantasia, empresas.email AS empresas_email, empresas.telefone AS empresas_telefone, empresas.data_cadastro AS empresas_data_cadastro, empresas.ativo AS empresas_ativo 
+FROM empresas 
+WHERE empresas.ativo = 1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) [in c:\prototipo\backend\app\services\empresa_service.py:163]
+2025-02-25 15:13:01,044 ERROR: Erro ao listar empresas: (sqlite3.OperationalError) no such column: empresas.cpf_cnpj
+[SQL: SELECT empresas.id AS empresas_id, empresas.cpf_cnpj AS empresas_cpf_cnpj, empresas.inscricao_estadual AS empresas_inscricao_estadual, empresas.inscricao_municipal AS empresas_inscricao_municipal, empresas.nome_razao_social AS empresas_nome_razao_social, empresas.nome_fantasia AS empresas_nome_fantasia, empresas.email AS empresas_email, empresas.telefone AS empresas_telefone, empresas.data_cadastro AS empresas_data_cadastro, empresas.ativo AS empresas_ativo 
+FROM empresas 
+WHERE empresas.ativo = 1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) [in c:\prototipo\backend\app\routes\empresa.py:47]
+2025-02-25 15:21:20,750 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:64]

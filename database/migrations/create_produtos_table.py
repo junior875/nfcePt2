@@ -1,4 +1,5 @@
-"""create produtos table
+"""
+create produtos table
 
 Revision ID: 001
 Revises: 

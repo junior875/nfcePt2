@@ -1,52 +1,112 @@
 import os
 import base64
-import requests
-from ...config import Config
+import logging
+from backend.app.services.nuvem_fiscal.client import NuvemFiscalClient
+
+# Configurar logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 class CertificadoService:
+    """Serviço para gerenciar certificados digitais"""
+    
     def __init__(self, cpf_cnpj):
+        """
+        Inicializa o serviço de certificado para uma empresa específica
+        
+        Args:
+            cpf_cnpj (str): CPF/CNPJ da empresa
+        """
         self.cpf_cnpj = cpf_cnpj
-        self.base_url = f"https://api.nuvemfiscal.com.br/empresas/{cpf_cnpj}/certificado"
-        self.headers = {
-            "Authorization": f"Bearer {Config.NUVEM_FISCAL_API_KEY}",
-            "Content-Type": "application/json"
-        }
-
+        # Usar o mesmo cliente da Nuvem Fiscal que funciona para empresas
+        self.nuvem_fiscal = NuvemFiscalClient()
+    
     def get_certificado(self):
-        response = requests.get(self.base_url, headers=self.headers)
-        if response.status_code == 200:
-            return response.json()
-        return None
-
+        """
+        Consulta informações do certificado na API da Nuvem Fiscal
+        
+        Returns:
+            dict: Informações do certificado ou None se não encontrado
+        """
+        try:
+            # Remover caracteres especiais do CNPJ
+            cpf_cnpj_limpo = ''.join(filter(str.isdigit, self.cpf_cnpj))
+            
+            # URL para consulta do certificado
+            url = f"empresas/{cpf_cnpj_limpo}/certificado"
+            
+            # Fazer consulta usando o cliente da Nuvem Fiscal
+            response = self.nuvem_fiscal.get(url)
+            return response
+            
+        except Exception as e:
+            logger.error(f"Erro ao consultar certificado: {str(e)}")
+            return None
+    
     def upload_certificado(self, certificado_file, senha):
-        # Ler o conteúdo do arquivo e codificar em base64
-        with open(certificado_file, 'rb') as file:
-            certificado_base64 = base64.b64encode(file.read()).decode('utf-8')
+        """
+        Realiza o upload de um certificado digital para a Nuvem Fiscal
         
-        # Montar o payload no formato JSON
-        payload = {
-            "certificado": certificado_base64,
-            "password": senha
-        }
+        Args:
+            certificado_file: Arquivo do certificado (FileStorage ou caminho)
+            senha (str): Senha do certificado
         
-        # Enviar o certificado para a API
-        response = requests.put(self.base_url, headers=self.headers, json=payload)
-        
-        if response.status_code == 200:
-            # Salvar uma cópia do certificado
-            certificado_path = os.path.join(Config.STORAGE_PATH, 'certificados', f'{self.cpf_cnpj}.pfx')
-            os.makedirs(os.path.dirname(certificado_path), exist_ok=True)  # Cria o diretório se não existir
-            with open(certificado_path, 'wb') as local_file:
-                local_file.write(base64.b64decode(certificado_base64))
-            return response.json()
-        return None
-
+        Returns:
+            dict: Informações do certificado ou None em caso de erro
+        """
+        try:
+            # Remover caracteres especiais do CNPJ
+            cpf_cnpj_limpo = ''.join(filter(str.isdigit, self.cpf_cnpj))
+            
+            # Ler o conteúdo do arquivo
+            if hasattr(certificado_file, 'read'):
+                # É um objeto FileStorage
+                certificado_bytes = certificado_file.read()
+            else:
+                # É um caminho de arquivo
+                with open(certificado_file, 'rb') as file:
+                    certificado_bytes = file.read()
+            
+            # Codificar em base64
+            certificado_base64 = base64.b64encode(certificado_bytes).decode('utf-8')
+            
+            # Construir payload
+            payload = {
+                "certificado": certificado_base64,
+                "password": senha  # Nome correto conforme documentação
+            }
+            
+            # URL para upload do certificado
+            url = f"empresas/{cpf_cnpj_limpo}/certificado"
+            
+            # Fazer requisição usando o cliente da Nuvem Fiscal
+            response = self.nuvem_fiscal.put(url, payload)
+            return response
+            
+        except Exception as e:
+            logger.error(f"Erro ao fazer upload do certificado: {str(e)}")
+            return None
+    
     def delete_certificado(self):
-        response = requests.delete(self.base_url, headers=self.headers)
-        if response.status_code == 204:
-            # Remover o arquivo local se existir
-            certificado_path = os.path.join(Config.STORAGE_PATH, 'certificados', f'{self.cpf_cnpj}.pfx')
-            if os.path.exists(certificado_path):
-                os.remove(certificado_path)
-            return True
-        return False
+        """
+        Exclui o certificado digital da Nuvem Fiscal
+        
+        Returns:
+            bool: True se a exclusão foi bem-sucedida, False caso contrário
+        """
+        try:
+            # Remover caracteres especiais do CNPJ
+            cpf_cnpj_limpo = ''.join(filter(str.isdigit, self.cpf_cnpj))
+            
+            # URL para exclusão do certificado
+            url = f"empresas/{cpf_cnpj_limpo}/certificado"
+            
+            # Fazer requisição usando o cliente da Nuvem Fiscal
+            response = self.nuvem_fiscal.delete(url)
+            
+            # Verificar se a exclusão foi bem-sucedida
+            return response is not None
+            
+        except Exception as e:
+            logger.error(f"Erro ao excluir certificado: {str(e)}")
+            return False

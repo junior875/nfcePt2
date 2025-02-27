@@ -1,85 +1,91 @@
-2025-02-25 14:13:36,843 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:54]
-2025-02-25 14:15:42,217 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:54]
-2025-02-25 14:16:50,989 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:54]
-2025-02-25 14:20:10,989 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:54]
-2025-02-25 14:20:53,761 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:54]
-2025-02-25 14:22:44,897 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:54]
-2025-02-25 15:22:43,637 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:64]
-2025-02-25 15:22:57,672 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:64]
-2025-02-25 15:22:58,828 INFO: Iniciando aplicação NFCe [in c:\prototipo\backend\app\__init__.py:64]
-2025-02-25 15:23:24,484 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in c:\prototipo\backend\app\services\nuvem_fiscal\client.py:72]
-2025-02-25 15:23:27,295 ERROR: Erro ao cadastrar empresa: 400 Client Error: Bad Request for url: https://api.nuvemfiscal.com.br/empresas [in c:\prototipo\backend\app\services\nuvem_fiscal\client.py:127]
-2025-02-25 15:23:27,307 ERROR: Resposta da API: {
+2025-02-27 10:03:24,803 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 10:03:25,875 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 10:08:51,012 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 10:53:46,778 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 10:54:02,074 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 10:54:23,346 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 10:54:24,916 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 10:56:15,776 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 10:57:37,327 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:03:01,076 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:04:08,296 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:05:44,520 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:06:23,554 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:07:06,124 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:07:29,326 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:07:40,827 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:08:57,037 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:10:09,020 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-27 11:10:11,925 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A cadastrada com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:47]
+2025-02-27 11:10:16,413 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A atualizada com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:104]
+2025-02-27 11:10:18,474 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A desativada com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:218]
+2025-02-27 11:10:20,931 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A excluída com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:189]
+2025-02-27 11:19:16,835 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:19:47,336 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:20:19,543 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:20:20,638 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:20:54,616 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-27 11:20:54,961 ERROR: Erro na requisição PUT empresas/48.144.666-0001-40/certificado/upload: 404 Client Error: Not Found for url: https://api.nuvemfiscal.com.br/empresas/48.144.666-0001-40/certificado/upload [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:116]
+2025-02-27 11:20:54,962 ERROR: Resposta da API: {
     "error": {
-        "code": "InvalidJsonProperty",
-        "message": "Property \"telefone\" does not refer to a known property in type \"Empresa.DTO.TEmpresa\""
+        "code": "EmpresaNotFound",
+        "message": "O CNPJ ou CPF 48.144.666-0001-40 do emitente não é válido"
     }
-} [in c:\prototipo\backend\app\services\nuvem_fiscal\client.py:129]
-2025-02-25 15:23:27,308 ERROR: Erro ao criar empresa: Erro ao cadastrar empresa: 400 Client Error: Bad Request for url: https://api.nuvemfiscal.com.br/empresas [in c:\prototipo\backend\app\services\empresa_service.py:53]
-2025-02-25 15:23:27,309 ERROR: Erro ao criar empresa: Erro ao cadastrar empresa: 400 Client Error: Bad Request for url: https://api.nuvemfiscal.com.br/empresas [in c:\prototipo\backend\app\routes\empresa.py:106]
-2025-02-26 14:47:10,367 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 14:47:11,548 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 14:47:23,275 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:72]
-2025-02-26 14:47:26,193 ERROR: Erro ao cadastrar empresa: 400 Client Error: Bad Request for url: https://api.nuvemfiscal.com.br/empresas [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:127]
-2025-02-26 14:47:26,193 ERROR: Resposta da API: {
+} [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:118]
+2025-02-27 11:20:57,362 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-27 11:20:57,661 ERROR: Erro na requisição GET empresas/48.144.666-0001-40/certificado: 404 Client Error: Not Found for url: https://api.nuvemfiscal.com.br/empresas/48.144.666-0001-40/certificado [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:116]
+2025-02-27 11:20:57,662 ERROR: Resposta da API: {
     "error": {
-        "code": "InvalidJsonProperty",
-        "message": "Property \"telefone\" does not refer to a known property in type \"Empresa.DTO.TEmpresa\""
+        "code": "EmpresaNotFound",
+        "message": "O CNPJ ou CPF 48.144.666-0001-40 do emitente não é válido"
     }
-} [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:129]
-2025-02-26 14:47:26,194 ERROR: Erro ao criar empresa: Erro ao cadastrar empresa: 400 Client Error: Bad Request for url: https://api.nuvemfiscal.com.br/empresas [in C:\prototipo\backend\app\services\empresa_service.py:53]
-2025-02-26 14:47:26,194 ERROR: Erro ao criar empresa: Erro ao cadastrar empresa: 400 Client Error: Bad Request for url: https://api.nuvemfiscal.com.br/empresas [in C:\prototipo\backend\app\routes\empresa.py:106]
-2025-02-26 14:52:42,747 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 14:53:38,742 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 14:55:04,660 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:72]
-2025-02-26 14:55:08,791 ERROR: Erro ao cadastrar empresa: 400 Client Error: Bad Request for url: https://api.nuvemfiscal.com.br/empresas [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:127]
-2025-02-26 14:55:08,791 ERROR: Resposta da API: {
+} [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:118]
+2025-02-27 11:21:00,096 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-27 11:21:00,644 ERROR: Erro na requisição DELETE empresas/48.144.666-0001-40/certificado: 404 Client Error: Not Found for url: https://api.nuvemfiscal.com.br/empresas/48.144.666-0001-40/certificado [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:116]
+2025-02-27 11:21:00,645 ERROR: Resposta da API: {
     "error": {
-        "code": "InvalidJsonProperty",
-        "message": "Property \"telefone\" does not refer to a known property in type \"Empresa.DTO.TEmpresa\""
+        "code": "EmpresaNotFound",
+        "message": "O CNPJ ou CPF 48.144.666-0001-40 do emitente não é válido"
     }
-} [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:129]
-2025-02-26 14:55:08,792 ERROR: Erro ao criar empresa: Erro ao cadastrar empresa: 400 Client Error: Bad Request for url: https://api.nuvemfiscal.com.br/empresas [in C:\prototipo\backend\app\services\empresa_service.py:53]
-2025-02-26 14:55:08,793 ERROR: Erro ao criar empresa: Erro ao cadastrar empresa: 400 Client Error: Bad Request for url: https://api.nuvemfiscal.com.br/empresas [in C:\prototipo\backend\app\routes\empresa.py:106]
-2025-02-26 14:58:22,062 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 14:59:22,468 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 14:59:49,877 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 15:03:00,008 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 15:03:11,855 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 15:03:36,270 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
-2025-02-26 15:03:39,108 ERROR: Erro ao cadastrar empresa: {
+} [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:118]
+2025-02-27 11:23:08,508 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:23:32,322 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:25:15,812 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:25:52,751 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:26:08,507 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-27 11:26:08,833 ERROR: Erro na requisição PUT: 400 - {
     "error": {
-        "code": "InvalidJsonProperty",
-        "message": "Property \"telefone\" does not refer to a known property in type \"Empresa.DTO.TEmpresa\""
+        "code": "InvalidMultipart",
+        "message": "Invalid media type. Expected multipart/*, actual application/json"
     }
-} [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:141]
-2025-02-26 15:03:39,108 ERROR: Erro ao criar empresa: 400 Client Error: Bad Request for url: https://api.nuvemfiscal.com.br/empresas [in C:\prototipo\backend\app\services\empresa_service.py:53]
-2025-02-26 15:03:39,110 ERROR: Erro ao criar empresa: 400 Client Error: Bad Request for url: https://api.nuvemfiscal.com.br/empresas [in C:\prototipo\backend\app\routes\empresa.py:106]
-2025-02-26 15:09:32,905 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 15:10:29,072 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 15:10:43,871 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 15:10:45,072 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 15:10:53,178 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
-2025-02-26 15:10:56,180 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A cadastrada com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:47]
-2025-02-26 15:11:00,766 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A atualizada com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:104]
-2025-02-26 15:11:02,834 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A desativada com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:218]
-2025-02-26 15:11:05,284 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A excluída com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:189]
-2025-02-26 15:50:36,386 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 15:50:59,414 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 15:53:30,561 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 15:54:49,354 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:64]
-2025-02-26 16:27:30,914 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:27:32,096 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:29:29,504 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:31:07,453 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:32:54,807 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:33:10,867 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:33:27,997 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:34:40,515 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:48:39,713 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:48:41,174 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:51:31,043 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:51:44,991 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:52:09,597 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:52:10,992 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
-2025-02-26 16:55:23,299 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+} [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:261]
+2025-02-27 11:26:08,836 ERROR: Falha ao enviar certificado [in C:\prototipo\backend\app\services\nuvem_fiscal\certificado.py:84]
+2025-02-27 11:26:08,836 ERROR: Falha ao enviar certificado [in C:\prototipo\backend\app\routes\certificado.py:54]
+2025-02-27 11:26:57,885 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:26:58,929 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:27:10,784 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-27 11:27:11,078 ERROR: Erro na requisição PUT: 400 - {
+    "error": {
+        "code": "InvalidMultipart",
+        "message": "Invalid media type. Expected multipart/*, actual application/json"
+    }
+} [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:261]
+2025-02-27 11:27:11,080 ERROR: Falha ao enviar certificado [in C:\prototipo\backend\app\services\nuvem_fiscal\certificado.py:84]
+2025-02-27 11:27:11,080 ERROR: Falha ao enviar certificado [in C:\prototipo\backend\app\routes\certificado.py:54]
+2025-02-27 11:28:16,080 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:31:17,142 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:42:57,829 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:57:29,532 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:57:44,991 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:58:43,043 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:58:59,966 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:59:23,691 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:59:24,748 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 11:59:39,491 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-27 11:59:42,344 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-27 11:59:45,146 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-27 11:59:47,910 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-27 12:08:25,408 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 12:10:59,929 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-27 12:11:04,097 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-27 12:15:12,076 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]

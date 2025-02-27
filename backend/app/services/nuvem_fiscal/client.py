@@ -89,6 +89,7 @@ class NuvemFiscalClient:
             "Content-Type": "application/json"
         }
     
+    
     def consultar_cnpj(self, cnpj):
         """Consulta informações de uma empresa pelo CNPJ"""
         try:
@@ -212,3 +213,99 @@ class NuvemFiscalClient:
             if hasattr(e, 'response') and e.response is not None:
                 logger.error(f"Resposta da API: {e.response.text}")
             raise Exception(f"Erro ao excluir empresa: {str(e)}")
+        
+    # Adicione estes métodos à classe NuvemFiscalClient
+
+    # Adicione estes métodos à classe NuvemFiscalClient
+
+    def get(self, endpoint):
+        """
+        Executa uma requisição GET na API da Nuvem Fiscal
+        
+        Args:
+            endpoint (str): Caminho do endpoint relativo à URL base
+            
+        Returns:
+            dict: Resposta da API em formato JSON ou None em caso de erro
+        """
+        try:
+            url = f"{self.api_base_url}/{endpoint}"
+            headers = self.get_headers()
+            
+            response = requests.get(url, headers=headers)
+            
+            # Verificar se o token expirou
+            if response.status_code == 401:
+                self.authenticate()
+                headers = self.get_headers()
+                response = requests.get(url, headers=headers)
+            
+            if response.status_code == 200:
+                return response.json()
+                
+            return None
+            
+        except Exception as e:
+            logger.error(f"Erro na requisição GET para {endpoint}: {str(e)}")
+            return None
+
+    def put(self, endpoint, data):
+        """
+        Executa uma requisição PUT na API da Nuvem Fiscal
+        
+        Args:
+            endpoint (str): Caminho do endpoint relativo à URL base
+            data (dict): Dados a serem enviados no corpo da requisição
+            
+        Returns:
+            dict: Resposta da API em formato JSON ou None em caso de erro
+        """
+        try:
+            url = f"{self.api_base_url}/{endpoint}"
+            headers = self.get_headers()
+            
+            response = requests.put(url, json=data, headers=headers)
+            
+            # Verificar se o token expirou
+            if response.status_code == 401:
+                self.authenticate()
+                headers = self.get_headers()
+                response = requests.put(url, json=data, headers=headers)
+            
+            if response.status_code == 200:
+                return response.json()
+                
+            logger.error(f"Erro na requisição PUT: {response.status_code} - {response.text}")
+            return None
+            
+        except Exception as e:
+            logger.error(f"Erro na requisição PUT para {endpoint}: {str(e)}")
+            return None
+
+    def delete(self, endpoint):
+        """
+        Executa uma requisição DELETE na API da Nuvem Fiscal
+        
+        Args:
+            endpoint (str): Caminho do endpoint relativo à URL base
+            
+        Returns:
+            bool: True se a operação foi bem-sucedida, False caso contrário
+        """
+        try:
+            url = f"{self.api_base_url}/{endpoint}"
+            headers = self.get_headers()
+            
+            response = requests.delete(url, headers=headers)
+            
+            # Verificar se o token expirou
+            if response.status_code == 401:
+                self.authenticate()
+                headers = self.get_headers()
+                response = requests.delete(url, headers=headers)
+            
+            return response.status_code in [200, 204]
+            
+        except Exception as e:
+            logger.error(f"Erro na requisição DELETE para {endpoint}: {str(e)}")
+            return False

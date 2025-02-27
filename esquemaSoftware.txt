@@ -266,7 +266,8 @@ FRONTEND (NO PACKAGE.JSON, MAS PRECISAM SER INSTALADAS):
 =================================
 BACKEND:
 ```bash
-python run.py  # Iniciar servidor
+python start_server.py # Iniciar servidor
+python run.py  
 
 
 FRONTEND:

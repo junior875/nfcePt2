@@ -59,7 +59,7 @@ class NuvemFiscalClient:
             
             payload = {
                 'grant_type': 'client_credentials',
-                'scope': 'empresa cnpj nfe'  # Escopos necessários para a API
+                'scope': 'empresa cnpj nfce nfe'  # Escopos necessários para a API
             }
             
             response = requests.post(
@@ -217,6 +217,39 @@ class NuvemFiscalClient:
     # Adicione estes métodos à classe NuvemFiscalClient
 
     # Adicione estes métodos à classe NuvemFiscalClient
+    def post(self, endpoint, data):
+        """
+        Executa uma requisição POST na API da Nuvem Fiscal.
+
+        Args:
+            endpoint (str): Caminho do endpoint relativo à URL base.
+            data (dict): Dados a serem enviados no corpo da requisição.
+
+        Returns:
+            dict: Resposta da API em formato JSON ou None em caso de erro.
+        """
+        try:
+            url = f"{self.api_base_url}/{endpoint}"  # Garante que a URL está correta
+            headers = self.get_headers()
+
+            response = requests.post(url, json=data, headers=headers)
+
+            # Verifica se o token expirou e renova se necessário
+            if response.status_code == 401:
+                self.authenticate()
+                headers = self.get_headers()
+                response = requests.post(url, json=data, headers=headers)
+
+            if response.status_code in [200, 201]:
+                return response.json()
+
+            logger.error(f"Erro na requisição POST: {response.status_code} - {response.text}")
+            return None
+
+        except Exception as e:
+            logger.error(f"Erro na requisição POST para {endpoint}: {str(e)}")
+            return None
+
 
     def get(self, endpoint):
         """

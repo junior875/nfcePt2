@@ -18,3 +18,8 @@
 2025-02-28 11:17:39,482 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A atualizada com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:104]
 2025-02-28 11:17:41,537 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A desativada com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:213]
 2025-02-28 11:17:43,888 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A excluída com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:184]
+2025-02-28 11:19:38,390 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]
+2025-02-28 11:19:44,443 INFO: Autenticação na Nuvem Fiscal realizada com sucesso [in C:\prototipo\backend\app\services\nuvem_fiscal\client.py:75]
+2025-02-28 11:19:47,215 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A cadastrada com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:49]
+2025-02-28 11:19:51,642 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A atualizada com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:104]
+2025-02-28 11:19:53,707 INFO: Empresa EMPREENDIMENTOS PAGUE MENOS S/A desativada com sucesso. [in C:\prototipo\backend\app\services\empresa_service.py:213]

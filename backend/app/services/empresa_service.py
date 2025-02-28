@@ -1,7 +1,8 @@
+# backend/app/services/empresa_service.py
 import logging
-from backend.app import db
 from backend.app.models.empresa import Empresa, Endereco
 from backend.app.services.nuvem_fiscal.client import NuvemFiscalClient
+from database.factory import RepositoryFactory
 
 # Configurar logger
 logger = logging.getLogger(__name__)
@@ -11,6 +12,8 @@ class EmpresaService:
     
     def __init__(self):
         self.nuvem_fiscal = NuvemFiscalClient()
+        # Usar a fábrica para obter o repositório adequado
+        self.empresa_repository = RepositoryFactory.get_empresa_repository()
     
     def consultar_cnpj(self, cnpj):
         """Consulta informações de uma empresa pelo CNPJ na API da Nuvem Fiscal"""
@@ -40,16 +43,13 @@ class EmpresaService:
             dados_nuvem_fiscal = nova_empresa.to_nuvem_fiscal_dict()
             resultado_api = self.nuvem_fiscal.cadastrar_empresa(dados_nuvem_fiscal)
             
-            # Salvar no banco de dados local
-            db.session.add(nova_empresa)
-            db.session.commit()
+            # Salvar no banco de dados local usando o repositório
+            empresa_salva = self.empresa_repository.save(nova_empresa)
             
             logger.info(f"Empresa {nova_empresa.nome_razao_social} cadastrada com sucesso.")
-            return nova_empresa
+            return empresa_salva
             
         except Exception as e:
-            # Rollback da transação em caso de erro
-            db.session.rollback()
             logger.error(f"Erro ao criar empresa: {str(e)}")
             raise
     
@@ -65,8 +65,8 @@ class EmpresaService:
             Empresa: Objeto da empresa atualizada
         """
         try:
-            # Buscar empresa no banco local
-            empresa = Empresa.query.get(empresa_id)
+            # Buscar empresa no repositório
+            empresa = self.empresa_repository.find_by_id(empresa_id)
             if not empresa:
                 raise ValueError(f"Empresa com ID {empresa_id} não encontrada")
             
@@ -98,15 +98,13 @@ class EmpresaService:
             dados_nuvem_fiscal = empresa.to_nuvem_fiscal_dict()
             self.nuvem_fiscal.atualizar_empresa(empresa.cpf_cnpj, dados_nuvem_fiscal)
             
-            # Salvar alterações no banco local
-            db.session.commit()
+            # Salvar alterações no repositório
+            empresa_atualizada = self.empresa_repository.save(empresa)
             
             logger.info(f"Empresa {empresa.nome_razao_social} atualizada com sucesso.")
-            return empresa
+            return empresa_atualizada
             
         except Exception as e:
-            # Rollback da transação em caso de erro
-            db.session.rollback()
             logger.error(f"Erro ao atualizar empresa: {str(e)}")
             raise
     
@@ -121,7 +119,7 @@ class EmpresaService:
             Empresa: Objeto da empresa encontrada ou None
         """
         try:
-            return Empresa.query.get(empresa_id)
+            return self.empresa_repository.find_by_id(empresa_id)
         except Exception as e:
             logger.error(f"Erro ao buscar empresa por ID {empresa_id}: {str(e)}")
             raise
@@ -137,9 +135,7 @@ class EmpresaService:
             Empresa: Objeto da empresa encontrada ou None
         """
         try:
-            # Limpar o CNPJ para busca (remover caracteres especiais)
-            cnpj_limpo = ''.join(filter(str.isdigit, cnpj))
-            return Empresa.query.filter_by(cpf_cnpj=cnpj_limpo).first()
+            return self.empresa_repository.find_by_cnpj(cnpj)
         except Exception as e:
             logger.error(f"Erro ao buscar empresa por CNPJ {cnpj}: {str(e)}")
             raise
@@ -155,10 +151,10 @@ class EmpresaService:
             list: Lista de objetos Empresa
         """
         try:
-            query = Empresa.query
             if ativas:
-                query = query.filter_by(ativo=True)
-            return query.all()
+                return self.empresa_repository.find_active()
+            else:
+                return self.empresa_repository.find_all()
         except Exception as e:
             logger.error(f"Erro ao listar empresas: {str(e)}")
             raise
@@ -174,24 +170,21 @@ class EmpresaService:
             bool: True se a exclusão for bem-sucedida
         """
         try:
-            # Buscar empresa no banco local
-            empresa = Empresa.query.get(empresa_id)
+            # Buscar empresa no repositório
+            empresa = self.empresa_repository.find_by_id(empresa_id)
             if not empresa:
                 raise ValueError(f"Empresa com ID {empresa_id} não encontrada")
             
             # Excluir da Nuvem Fiscal
             self.nuvem_fiscal.excluir_empresa(empresa.cpf_cnpj)
             
-            # Excluir do banco local
-            db.session.delete(empresa)
-            db.session.commit()
+            # Excluir do repositório local
+            resultado = self.empresa_repository.delete(empresa_id)
             
             logger.info(f"Empresa {empresa.nome_razao_social} excluída com sucesso.")
-            return True
+            return resultado
             
         except Exception as e:
-            # Rollback da transação em caso de erro
-            db.session.rollback()
             logger.error(f"Erro ao excluir empresa: {str(e)}")
             raise
     
@@ -206,20 +199,20 @@ class EmpresaService:
             Empresa: Objeto da empresa desativada
         """
         try:
-            # Buscar empresa no banco local
-            empresa = Empresa.query.get(empresa_id)
+            # Buscar empresa no repositório
+            empresa = self.empresa_repository.find_by_id(empresa_id)
             if not empresa:
                 raise ValueError(f"Empresa com ID {empresa_id} não encontrada")
             
             # Desativar
             empresa.ativo = False
-            db.session.commit()
+            
+            # Salvar no repositório
+            empresa_desativada = self.empresa_repository.save(empresa)
             
             logger.info(f"Empresa {empresa.nome_razao_social} desativada com sucesso.")
-            return empresa
+            return empresa_desativada
             
         except Exception as e:
-            # Rollback da transação em caso de erro
-            db.session.rollback()
             logger.error(f"Erro ao desativar empresa: {str(e)}")
             raise

@@ -162,7 +162,7 @@ def test_desativar_empresa(empresa_id):
     else:
         logger.error(f"Erro: {response.text}")
 
-def run_tests():
+'''def run_tests():
     """Executa todos os testes em sequência"""
     # Teste de consulta CNPJ
     test_consultar_cnpj()
@@ -190,4 +190,35 @@ def run_tests():
         test_listar_empresas()
 
 if __name__ == "__main__":
+    run_tests()'''
+
+def run_tests():
+    """Executa todos os testes em sequência, exceto exclusão"""
+    # Teste de consulta CNPJ
+    test_consultar_cnpj()
+    
+    # Teste de criação de empresa
+    empresa_id = test_criar_empresa()
+    
+    # Teste de listagem de empresas
+    test_listar_empresas()
+    
+    # Teste de atualização de empresa
+    if empresa_id:
+        test_atualizar_empresa(empresa_id)
+    
+    # Teste de desativação de empresa
+    if empresa_id:
+        test_desativar_empresa(empresa_id)
+    
+    # Verificar se empresa ainda está no banco (pulando exclusão)
+    logger.info("\n=== Verificação final: empresa deve permanecer no banco ===")
+    test_listar_empresas()
+    
+    logger.info("\n=== Testes concluídos! A empresa NÃO foi excluída do banco. ===")
+    if empresa_id:
+        logger.info(f"Empresa com ID {empresa_id} permanece no banco para verificação.")
+
+if __name__ == "__main__":
     run_tests()
+    

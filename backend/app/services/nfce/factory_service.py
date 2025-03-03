@@ -199,6 +199,8 @@ class NFCeFactory:
             "vTroco": troco
         }
     
+    # Modificações necessárias no método criar_nfce_payload no arquivo backend/app/services/nfce/factory_service.py
+
     def criar_nfce_payload(
         self,
         empresa: Empresa,
@@ -211,7 +213,7 @@ class NFCeFactory:
         Cria o payload da NFC-e para a Nuvem Fiscal
         
         Args:
-            empresa: Objeto da empresa emitente
+            empresa: Objeto da empresa emitente (obrigatório)
             itens: Lista de itens da NFC-e
             cliente: Dados do cliente
             pagamento: Dados do pagamento
@@ -220,6 +222,9 @@ class NFCeFactory:
         Returns:
             Dicionário com o payload da NFC-e
         """
+        if empresa is None:
+            raise ValueError("Empresa é obrigatória para criar o payload da NFC-e")
+            
         # Calcula os totais
         valor_total = sum(item["prod"]["vProd"] for item in itens)
         valor_pis = sum(item["imposto"]["PIS"]["PISAliq"]["vPIS"] for item in itens)
@@ -232,19 +237,33 @@ class NFCeFactory:
         # Gera a chave da NF-e
         chave_nfe = self.gerar_chave_nfe()
         
-        # Obtém os dados do endereço da empresa
+        # Obter dados da empresa do banco
+        cnpj = empresa.cpf_cnpj.replace(".", "").replace("/", "").replace("-", "")
+        nome_razao_social = empresa.nome_razao_social
+        inscricao_estadual = empresa.inscricao_estadual.replace(".", "") if empresa.inscricao_estadual else ""
+        
+        # Obter dados do endereço
         endereco = empresa.endereco
+        if not endereco:
+            raise ValueError("Empresa não possui endereço cadastrado")
+            
+        logradouro = endereco.logradouro
+        numero = endereco.numero
+        bairro = endereco.bairro
+        municipio = endereco.municipio
+        uf = endereco.uf
+        cep = endereco.cep.replace("-", "") if endereco.cep else ""
         
-        # Código do município fixo - não usa o atributo do objeto
-        codigo_municipio = "3106200"  # Código IBGE de Buritis-MG
+        # Código do município - utilizando código padrão se não tiver
+        codigo_municipio = getattr(endereco, 'codigo_municipio', "3106200")  # Padrão: Buritis-MG
         
-        # Cria o payload da NFC-e
+        # Criando o payload com os dados da empresa do banco
         return {
             "infNFe": {
                 "versao": "4.00",
                 "Id": chave_nfe,
                 "ide": {
-                    "cUF": 31,  # Código do estado de MG
+                    "cUF": 31,  # Código do estado de MG (poderia ser dinâmico baseado na UF)
                     "cNF": str(randint(10000000, 99999999)),
                     "natOp": "Venda de Mercadoria",
                     "mod": 65,  # NFC-e
@@ -253,7 +272,7 @@ class NFCeFactory:
                     "dhEmi": datetime.now(timezone.utc).isoformat(),
                     "tpNF": 1,  # Saída
                     "idDest": 1,  # Operação interna
-                    "cMunFG": codigo_municipio,  # Não usa endereco.codigo_municipio
+                    "cMunFG": codigo_municipio,
                     "tpImp": 4,  # Formato de DANFE NFC-e
                     "tpEmis": 1,  # Emissão normal
                     "cDV": 9,
@@ -265,20 +284,20 @@ class NFCeFactory:
                     "verProc": "1.0"
                 },
                 "emit": {
-                    "CNPJ": empresa.cpf_cnpj.replace(".", "").replace("/", "").replace("-", ""),
-                    "xNome": empresa.nome_razao_social,
+                    "CNPJ": cnpj,
+                    "xNome": nome_razao_social,
                     "enderEmit": {
-                        "xLgr": endereco.logradouro,
-                        "nro": endereco.numero,
-                        "xBairro": endereco.bairro,
-                        "cMun": codigo_municipio,  # Não usa endereco.codigo_municipio
-                        "xMun": endereco.municipio,
-                        "UF": endereco.uf,
-                        "CEP": endereco.cep.replace("-", ""),
+                        "xLgr": logradouro,
+                        "nro": numero,
+                        "xBairro": bairro,
+                        "cMun": codigo_municipio,
+                        "xMun": municipio,
+                        "UF": uf,
+                        "CEP": cep,
                         "cPais": "1058",
                         "xPais": "Brasil"
                     },
-                    "IE": empresa.inscricao_estadual.replace(".", ""),
+                    "IE": inscricao_estadual,
                     "CRT": 1  # Simples Nacional
                 },
                 "dest": cliente,

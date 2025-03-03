@@ -1,0 +1,503 @@
+# API de Notas Fiscais - Documentação
+
+## Visão Geral
+
+Esta API permite a gestão e emissão de Notas Fiscais de Consumidor Eletrônicas (NFC-e) para empresas cadastradas no sistema.
+
+- **URL Base**: `http://localhost:5000/api`
+- **Formato de Comunicação**: JSON
+- **Autenticação**: Não implementada (pendente)
+
+---
+
+## Endpoints
+
+### 1. Emissão de NFC-e
+
+Emite uma Nota Fiscal de Consumidor Eletrônica.
+
+#### Requisição
+
+```
+POST /nfce/emitir
+```
+
+**Headers:**
+```
+Content-Type: application/json
+```
+
+**Corpo da Requisição:**
+```json
+{
+  "empresa_cnpj": "48144666000140",
+  "cliente": {
+    "cpf": "01234567890",
+    "nome": "Nome do Cliente"
+  },
+  "pagamento": {
+    "forma": "dinheiro",
+    "valor_recebido": 10.00
+  },
+  "produtos": [
+    {
+      "codigo": "001",
+      "descricao": "Descrição do Produto",
+      "ncm": "12345678",
+      "quantidade": 2,
+      "valor_unitario": 5.00
+    }
+  ]
+}
+```
+
+**Parâmetros:**
+
+| Campo | Tipo | Obrigatório | Descrição |
+|-------|------|-------------|-----------|
+| empresa_cnpj | string | Sim | CNPJ da empresa emitente (deve estar cadastrada) |
+| cliente.cpf | string | Não | CPF do cliente (deve ser um CPF válido) |
+| cliente.nome | string | Não | Nome do cliente (padrão: "Consumidor Final") |
+| pagamento.forma | string | Não | Forma de pagamento: "dinheiro", "credito", "debito", "pix" (padrão: "dinheiro") |
+| pagamento.valor_recebido | number | Não | Valor recebido para cálculo de troco (apenas para pagamento em dinheiro) |
+| produtos | array | Sim | Lista de produtos da nota |
+| produtos[].codigo | string | Sim | Código interno do produto |
+| produtos[].descricao | string | Sim | Descrição do produto |
+| produtos[].ncm | string | Sim | Código NCM (Nomenclatura Comum do Mercosul) |
+| produtos[].quantidade | number | Sim | Quantidade do produto |
+| produtos[].valor_unitario | number | Sim | Valor unitário do produto |
+
+#### Resposta
+
+**Sucesso (200 OK):**
+```json
+{
+  "ambiente": "producao",
+  "autorizacao": {
+    "ambiente": "producao",
+    "autor": {
+      "cpf_cnpj": "48144666000140"
+    },
+    "chave_acesso": "31250348144666000140650010002107421107475934",
+    "codigo_status": 100,
+    "data_evento": "2025-03-03T14:22:54.521Z",
+    "data_recebimento": "2025-03-03T14:22:55Z",
+    "digest_value": "iVbrhkVA478sfJJFYNlgr9e9hH4=",
+    "id": "evt_3a1873b6a039480d9a3aa6091e90d024",
+    "motivo_status": "Autorizado o uso da NF-e",
+    "numero_protocolo": "131255712341410",
+    "numero_sequencial": 1,
+    "status": "registrado",
+    "tipo_evento": "autorizacao"
+  },
+  "chave": "31250348144666000140650010002107421107475934",
+  "created_at": "2025-03-03T14:22:54.506Z",
+  "data_emissao": "2025-03-03T14:22:53.299Z",
+  "id": "nfc_3a1873b6a0394d2c822994569613dddd",
+  "numero": 210742,
+  "serie": 1,
+  "status": "autorizado",
+  "valor_total": 10
+}
+```
+
+**Erro (400 Bad Request):**
+```json
+{
+  "erro": "Mensagem de erro",
+  "status": "erro"
+}
+```
+
+**Possíveis erros:**
+- Empresa não encontrada no sistema
+- CPF inválido
+- Dados incompletos ou inválidos
+- Falha na comunicação com a Nuvem Fiscal
+
+---
+
+### 2. Consulta de NFC-e (Pendente de Implementação)
+
+Consulta uma Nota Fiscal de Consumidor Eletrônica pelo ID.
+
+#### Requisição
+
+```
+GET /nfce/{id}
+```
+
+**Parâmetros:**
+
+| Parâmetro | Tipo | Localização | Descrição |
+|-----------|------|-------------|-----------|
+| id | string | path | ID da NFC-e |
+
+#### Resposta
+
+**Sucesso (200 OK):**
+```json
+{
+  "id": "nfc_3a1873b6a0394d2c822994569613dddd",
+  "chave": "31250348144666000140650010002107421107475934",
+  "status": "autorizado",
+  "valor_total": 10,
+  "data_emissao": "2025-03-03T14:22:53.299Z",
+  "empresa": {
+    "cnpj": "48144666000140",
+    "nome_razao_social": "NUNES E BUSATO BARBEARIA LTDA"
+  },
+  "itens": [
+    {
+      "codigo": "001",
+      "descricao": "Descrição do Produto",
+      "quantidade": 2,
+      "valor_unitario": 5.00,
+      "valor_total": 10.00
+    }
+  ]
+}
+```
+
+**Erro (404 Not Found):**
+```json
+{
+  "erro": "NFC-e não encontrada",
+  "status": "erro"
+}
+```
+
+---
+
+### 3. Listar NFC-e (Pendente de Implementação)
+
+Lista as Notas Fiscais emitidas com opções de filtro.
+
+#### Requisição
+
+```
+GET /nfce
+```
+
+**Parâmetros de Query:**
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+|-----------|------|-------------|-----------|
+| empresa_id | number | Não | Filtrar por ID da empresa |
+| status | string | Não | Filtrar por status ("autorizado", "processando", "erro") |
+| data_inicio | string | Não | Data inicial (formato: YYYY-MM-DD) |
+| data_fim | string | Não | Data final (formato: YYYY-MM-DD) |
+| pagina | number | Não | Número da página (padrão: 1) |
+| itens_por_pagina | number | Não | Itens por página (padrão: 20) |
+
+#### Resposta
+
+**Sucesso (200 OK):**
+```json
+{
+  "total": 2,
+  "pagina": 1,
+  "itens_por_pagina": 20,
+  "nfces": [
+    {
+      "id": "nfc_3a1873b6a0394d2c822994569613dddd",
+      "chave": "31250348144666000140650010002107421107475934",
+      "status": "autorizado",
+      "valor_total": 10,
+      "data_emissao": "2025-03-03T14:22:53.299Z"
+    },
+    {
+      "id": "nfc_3a18738e92584156afbd9a8b52100228",
+      "chave": "31250348144666000140650010006149801383945894",
+      "status": "autorizado",
+      "valor_total": 10,
+      "data_emissao": "2025-03-03T13:39:08.520Z"
+    }
+  ]
+}
+```
+
+---
+
+### 4. Cancelar NFC-e (Pendente de Implementação)
+
+Cancela uma Nota Fiscal de Consumidor Eletrônica.
+
+#### Requisição
+
+```
+POST /nfce/{id}/cancelar
+```
+
+**Headers:**
+```
+Content-Type: application/json
+```
+
+**Corpo da Requisição:**
+```json
+{
+  "justificativa": "Motivo do cancelamento"
+}
+```
+
+**Parâmetros:**
+
+| Parâmetro | Tipo | Localização | Descrição |
+|-----------|------|-------------|-----------|
+| id | string | path | ID da NFC-e |
+| justificativa | string | body | Motivo do cancelamento (min: 15 caracteres, max: 255 caracteres) |
+
+#### Resposta
+
+**Sucesso (200 OK):**
+```json
+{
+  "id": "nfc_3a1873b6a0394d2c822994569613dddd",
+  "status": "cancelado",
+  "data_cancelamento": "2025-03-03T15:00:00.000Z",
+  "protocolo_cancelamento": "131255712345678",
+  "mensagem": "NFC-e cancelada com sucesso"
+}
+```
+
+**Erro (400 Bad Request):**
+```json
+{
+  "erro": "Justificativa deve ter entre 15 e 255 caracteres",
+  "status": "erro"
+}
+```
+
+**Erro (404 Not Found):**
+```json
+{
+  "erro": "NFC-e não encontrada",
+  "status": "erro"
+}
+```
+
+---
+
+## Códigos NCM Comuns para Bares e Restaurantes
+
+Para facilitar o preenchimento do campo NCM dos produtos, segue uma lista de códigos NCM comuns:
+
+| Produto | NCM | Descrição |
+|---------|-----|-----------|
+| Cervejas | 22030000 | Cerveja de malte |
+| Refrigerantes | 22021000 | Águas, incluídas as águas minerais e as águas gaseificadas, adicionadas de açúcar ou de outros edulcorantes ou aromatizadas |
+| Sucos de Frutas | 20099000 | Misturas de sucos |
+| Águas Minerais | 22011000 | Águas minerais e águas gaseificadas |
+| Bebidas Alcoólicas Destiladas | 22089000 | Outras bebidas espirituosas |
+| Vinhos | 22042100 | Outros vinhos |
+| Porções de Batata | 20041000 | Batatas preparadas ou conservadas |
+| Porções Diversas | 21069090 | Outras preparações alimentícias |
+| Lanches | 16029000 | Outras preparações e conservas de carne, miudezas ou sangue |
+| Pratos Prontos | 21069090 | Outras preparações alimentícias |
+| Balas e Confeitos | 17049020 | Balas, caramelos, confeitos, pastilhas e produtos semelhantes |
+| Chicletes | 17041000 | Gomas de mascar, mesmo revestidas de açúcar |
+
+---
+
+## Códigos de Formas de Pagamento
+
+| Código | Forma de Pagamento | Código no Sistema |
+|--------|-------------------|-------------------|
+| 01 | Dinheiro | "dinheiro" |
+| 03 | Cartão de Crédito | "credito" |
+| 04 | Cartão de Débito | "debito" |
+| 17 | PIX | "pix" |
+| 99 | Outros | "outros" |
+
+---
+
+## Integração com o Front-end
+
+### Exemplo de integração em JavaScript/React
+
+```javascript
+// Função para emitir NFC-e
+async function emitirNFCe(dados) {
+  try {
+    const response = await fetch('http://localhost:5000/api/nfce/emitir', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dados)
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.erro || 'Erro ao emitir NFC-e');
+    }
+    
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Erro na emissão de NFC-e:', error);
+    throw error;
+  }
+}
+
+// Exemplo de uso
+const dadosVenda = {
+  empresa_cnpj: "48144666000140",
+  cliente: {
+    cpf: "01234567890",
+    nome: "Cliente Teste"
+  },
+  pagamento: {
+    forma: "dinheiro",
+    valor_recebido: 20.00
+  },
+  produtos: [
+    {
+      codigo: "001",
+      descricao: "Coca-Cola 350ml",
+      ncm: "22021000",
+      quantidade: 2,
+      valor_unitario: 5.00
+    },
+    {
+      codigo: "002",
+      descricao: "Porção de Batata",
+      ncm: "20041000",
+      quantidade: 1,
+      valor_unitario: 10.00
+    }
+  ]
+};
+
+// Chamada da função
+emitirNFCe(dadosVenda)
+  .then(resposta => {
+    console.log('NFC-e emitida com sucesso:', resposta);
+    // Exibir mensagem de sucesso para o usuário
+    alert(`NFC-e emitida com sucesso!\nChave: ${resposta.chave}`);
+  })
+  .catch(erro => {
+    console.error('Falha na emissão:', erro);
+    // Exibir mensagem de erro para o usuário
+    alert(`Erro: ${erro.message}`);
+  });
+```
+
+### Exemplo em TypeScript
+
+```typescript
+interface Produto {
+  codigo: string;
+  descricao: string;
+  ncm: string;
+  quantidade: number;
+  valor_unitario: number;
+}
+
+interface Cliente {
+  cpf?: string;
+  nome?: string;
+}
+
+interface Pagamento {
+  forma: 'dinheiro' | 'credito' | 'debito' | 'pix' | 'outros';
+  valor_recebido?: number;
+}
+
+interface DadosNFCe {
+  empresa_cnpj: string;
+  cliente?: Cliente;
+  pagamento?: Pagamento;
+  produtos: Produto[];
+}
+
+interface RespostaNFCe {
+  id: string;
+  ambiente: string;
+  status: string;
+  chave: string;
+  valor_total: number;
+  numero: number;
+  serie: number;
+  data_emissao: string;
+  created_at: string;
+  autorizacao: {
+    id: string;
+    ambiente: string;
+    status: string;
+    autor: {
+      cpf_cnpj: string;
+    };
+    chave_acesso: string;
+    codigo_status: number;
+    motivo_status: string;
+    numero_protocolo: string;
+    [key: string]: any;
+  };
+  [key: string]: any;
+}
+
+async function emitirNFCe(dados: DadosNFCe): Promise<RespostaNFCe> {
+  try {
+    const response = await fetch('http://localhost:5000/api/nfce/emitir', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dados)
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.erro || 'Erro ao emitir NFC-e');
+    }
+    
+    const result = await response.json();
+    return result as RespostaNFCe;
+  } catch (error) {
+    console.error('Erro na emissão de NFC-e:', error);
+    throw error;
+  }
+}
+```
+
+---
+
+## Considerações de Uso
+
+1. **Empresa cadastrada**: A empresa emitente deve estar previamente cadastrada no sistema antes de emitir notas fiscais.
+
+2. **CPF válido**: Se fornecido, o CPF do cliente deve ser válido.
+
+3. **NCM correto**: Utilize o código NCM correto para cada produto. Consulte a tabela de códigos NCM comuns ou a tabela completa no site da Receita Federal.
+
+4. **Ambiente**: O sistema está configurado para emitir em ambiente de produção por padrão.
+
+5. **Tempo de resposta**: A emissão de NFC-e pode levar alguns segundos para ser processada pelos servidores da SEFAZ.
+
+6. **Validações**: O sistema realiza validações básicas, mas é recomendável validar os dados no front-end antes de enviar para a API.
+
+---
+
+## Tratamento de Erros
+
+| Status Code | Descrição |
+|-------------|-----------|
+| 200 | Sucesso na operação |
+| 400 | Requisição inválida (dados incorretos ou incompletos) |
+| 404 | Recurso não encontrado |
+| 500 | Erro interno do servidor |
+
+Todas as respostas de erro conterão um objeto JSON com pelo menos um campo `erro` descrevendo o problema.
+
+---
+
+## Suporte
+
+Para mais informações ou suporte, entre em contato com a equipe de desenvolvimento.
+
+---
+
+**Versão da API**: 1.0  
+**Última atualização**: 03/03/2025

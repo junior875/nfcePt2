@@ -35,35 +35,17 @@ class NFCeEmissaoService:
             logger.error(f"Erro ao buscar empresa por CNPJ {cnpj}: {e}")
             raise
     
+    # Modificação para o método processar_emissao no arquivo backend/app/services/nfce/emissao_service.py
+
     def processar_emissao(self, dados: Dict[str, Any]) -> Dict[str, Any]:
         """
         Processa a emissão de uma NFC-e
         
         Args:
             dados (Dict[str, Any]): Dados da requisição
-                {
-                    "empresa_cnpj": "CNPJ da empresa",
-                    "cliente": {
-                        "cpf": "CPF do cliente (opcional)",
-                        "nome": "Nome do cliente (opcional)"
-                    },
-                    "pagamento": {
-                        "forma": "dinheiro|credito|debito|pix",
-                        "valor_recebido": 50.00 (opcional)
-                    },
-                    "produtos": [
-                        {
-                            "codigo": "Código do produto",
-                            "descricao": "Descrição do produto",
-                            "ncm": "NCM do produto",
-                            "quantidade": 1,
-                            "valor_unitario": 10.00
-                        }
-                    ]
-                }
                 
         Returns:
-            Dict[str, Any]: Resposta da API da Nuvem Fiscal
+            Dict[str, Any]: Resposta da API da Nuvem Fiscal ou mensagem de erro
         """
         try:
             # Validar dados mínimos
@@ -72,7 +54,11 @@ class NFCeEmissaoService:
             # Buscar empresa no banco
             empresa = self.buscar_empresa_por_cnpj(dados["empresa_cnpj"])
             if not empresa:
-                raise ValueError(f"Empresa com CNPJ {dados['empresa_cnpj']} não encontrada")
+                # Se não encontrar a empresa, retornar erro
+                return {
+                    "erro": f"Empresa com CNPJ {dados['empresa_cnpj']} não encontrada no sistema. É necessário cadastrar a empresa antes de emitir notas fiscais.",
+                    "status": "erro"
+                }
             
             # Preparar itens
             itens = []
@@ -104,7 +90,7 @@ class NFCeEmissaoService:
                 valor_recebido=pagamento_dados.get("valor_recebido")
             )
             
-            # Criar payload NFC-e
+            # Criar payload NFC-e com a empresa encontrada no banco
             payload = self.factory.criar_nfce_payload(
                 empresa=empresa,
                 itens=itens,
@@ -116,14 +102,19 @@ class NFCeEmissaoService:
             logger.info(f"Emitindo NFC-e para empresa {empresa.nome_razao_social}")
             resposta = self.factory.emitir_nfce(payload)
             
-            # Salvar registro no banco de dados
-            self._salvar_nfce(resposta, empresa.id, itens, payload)
+            # Salvar registro no banco de dados se a resposta for válida
+            if resposta and "erro" not in resposta:
+                try:
+                    self._salvar_nfce(resposta, empresa.id, itens, payload)
+                except Exception as e:
+                    logger.error(f"Erro ao salvar NFC-e no banco: {e}")
+                    # Não impede o fluxo se falhar ao salvar
             
             return resposta
             
         except Exception as e:
             logger.error(f"Erro ao processar emissão de NFC-e: {e}")
-            return {"erro": str(e)}
+            return {"erro": str(e), "status": "erro"}
     
     def _validar_dados(self, dados: Dict[str, Any]) -> None:
         """

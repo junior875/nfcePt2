@@ -1,6 +1,9 @@
 # database/repository.py
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional, TypeVar, Generic, TYPE_CHECKING
+from abc import ABC, abstractmethod
+from typing import List, Dict, Any, Optional
+from backend.app.models.nfce.nfce import NFCe
 
 if TYPE_CHECKING:
     # Importações que só são utilizadas para tipagem, evita importações circulares
@@ -51,4 +54,27 @@ class EmpresaRepository(BaseRepository["Empresa"], ABC):
     @abstractmethod
     def find_active(self) -> List["Empresa"]:
         """Busca todas as empresas ativas"""
+        pass
+
+class NFCeRepository(BaseRepository[NFCe], ABC):
+    """Interface específica para repositório de NFCe"""
+    
+    @abstractmethod
+    def find_by_chave(self, chave: str) -> Optional[NFCe]:
+        """Busca uma NFCe pela chave de acesso"""
+        pass
+    
+    @abstractmethod
+    def find_by_nuvem_fiscal_id(self, nuvem_fiscal_id: str) -> Optional[NFCe]:
+        """Busca uma NFCe pelo ID da Nuvem Fiscal"""
+        pass
+    
+    @abstractmethod
+    def find_by_empresa_id(self, empresa_id: int) -> List[NFCe]:
+        """Busca NFCes pelo ID da empresa"""
+        pass
+    
+    @abstractmethod
+    def find_by_status(self, status: str) -> List[NFCe]:
+        """Busca NFCes pelo status"""
         pass

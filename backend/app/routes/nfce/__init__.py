@@ -1,0 +1,1 @@
+from backend.app.routes.nfce.emissao import nfce_blueprint

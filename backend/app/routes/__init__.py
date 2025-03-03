@@ -2,8 +2,9 @@ from flask import Flask
 from .auth import auth_bp
 from .empresa import empresa_bp
 from .produto import produto_bp
-from .nfce import nfce_bp
+from .nfce.emissao import nfce_blueprint as nfce_bp
 from .certificado import certificado_bp
+from backend.app.routes.nfce.emissao import nfce_blueprint
 
 def register_blueprints(app: Flask):
     """
@@ -18,3 +19,5 @@ def register_blueprints(app: Flask):
     app.register_blueprint(produto_bp, url_prefix='/api/produto')
     app.register_blueprint(nfce_bp, url_prefix='/api/nfce')
     app.register_blueprint(certificado_bp, url_prefix='/api/certificado')
+    # Registrar blueprint de NFC-e
+    #app.register_blueprint(nfce_blueprint)

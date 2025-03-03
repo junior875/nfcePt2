@@ -6,13 +6,15 @@ class Endereco(db.Model):
     __tablename__ = 'enderecos'
     
     id = db.Column(db.Integer, primary_key=True)
-    cep = db.Column(db.String(10))
-    logradouro = db.Column(db.String(255))
-    numero = db.Column(db.String(20))
-    complemento = db.Column(db.String(255), nullable=True)
-    bairro = db.Column(db.String(255))
-    municipio = db.Column(db.String(255))
-    uf = db.Column(db.String(2))
+    empresa_id = db.Column(db.Integer, db.ForeignKey('empresas.id'), nullable=False)
+    cep = db.Column(db.String(10), nullable=False)
+    logradouro = db.Column(db.String(255), nullable=False)
+    numero = db.Column(db.String(20), nullable=False)
+    complemento = db.Column(db.String(255))
+    bairro = db.Column(db.String(255), nullable=False)
+    codigo_municipio = db.Column(db.String(20))  # Adicione esta linha
+    municipio = db.Column(db.String(255), nullable=False)
+    uf = db.Column(db.String(2), nullable=False)
     
     # Relacionamento com Empresa
     empresa_id = db.Column(db.Integer, db.ForeignKey('empresas.id', ondelete='CASCADE'))

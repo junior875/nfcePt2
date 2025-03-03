@@ -3,6 +3,9 @@ import os
 import logging
 from database.repository import EmpresaRepository
 from database.sqlalchemy_repository import SQLAlchemyEmpresaRepository
+from database.repository import NFCeRepository
+from database.sqlalchemy_repository import SQLAlchemyNFCeRepository
+
 
 logger = logging.getLogger(__name__)
 
@@ -34,3 +37,21 @@ class RepositoryFactory:
             # Por exemplo: PostgreSQL, MySQL, MongoDB, etc.
             logger.warning(f"Tipo de repositório '{repo_type}' não suportado. Usando SQLAlchemy.")
             return SQLAlchemyEmpresaRepository()
+        
+    @staticmethod
+    def get_nfce_repository() -> NFCeRepository:
+        """
+        Cria e retorna um repositório de NFCe
+        
+        Returns:
+            NFCeRepository: Repositório de NFCe
+        """
+        # Obter tipo de repositório da configuração ou variável de ambiente
+        repo_type = os.environ.get('DB_REPOSITORY_TYPE', 'sqlalchemy')
+        
+        if repo_type.lower() == 'sqlalchemy':
+            return SQLAlchemyNFCeRepository()
+        else:
+            # No futuro, adicionar outras implementações aqui
+            logger.warning(f"Tipo de repositório '{repo_type}' não suportado. Usando SQLAlchemy.")
+            return SQLAlchemyNFCeRepository()

@@ -275,7 +275,7 @@ class NFCeFactory:
                     "tpAmb": 1 if ambiente == "producao" else 2,
                     "finNFe": 1,  # Nota fiscal normal
                     "indFinal": 1,  # Consumidor final
-                    "indPres": 2,  # Presencial
+                    "indPres": 5,  # Presencial 
                     "procEmi": 0,
                     "verProc": "1.0"
                 },

@@ -53,7 +53,8 @@ class NFCeFactory:
             "cheque": "02",
             "credito": "03",
             "debito": "04",
-            "pix": "17"
+            "pix": "17",
+            "outros": "99"
         }
         return mapeamento.get(forma.lower(), "01")  # Default para dinheiro
     
@@ -275,7 +276,7 @@ class NFCeFactory:
                     "tpAmb": 1 if ambiente == "producao" else 2,
                     "finNFe": 1,  # Nota fiscal normal
                     "indFinal": 1,  # Consumidor final
-                    "indPres": 2,  # Presencial
+                    "indPres": 1,  # Presencial
                     "procEmi": 0,
                     "verProc": "1.0"
                 },

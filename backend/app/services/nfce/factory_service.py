@@ -5,7 +5,6 @@ from random import randint
 from typing import List, Dict, Optional, Union, Any
 import logging
 from decimal import Decimal
-
 from backend.app.models.empresa import Empresa
 from backend.app.services.nuvem_fiscal.client import NuvemFiscalClient
 
@@ -154,11 +153,10 @@ class NFCeFactory:
             # Limpar CPF (manter apenas números)
             cpf_limpo = ''.join(filter(str.isdigit, cpf))
             
-            # Validar CPF - se não for 11 dígitos ou não for válido, não incluir
+            # Validar CPF - verificar se tem 11 dígitos
             if len(cpf_limpo) == 11:
-                # Usar um CPF válido que sabemos que funciona
-                # Para testes, podemos usar um CPF fixo conhecido válido
-                cliente["CPF"] = "12345678909"  # CPF válido do exemplo original
+                # CORREÇÃO: Usar o CPF fornecido pelo cliente em vez de um valor fixo
+                cliente["CPF"] = cpf_limpo
         
         return cliente
     
@@ -199,8 +197,6 @@ class NFCeFactory:
             "vTroco": troco
         }
     
-    # Modificações necessárias no método criar_nfce_payload no arquivo backend/app/services/nfce/factory_service.py
-
     def criar_nfce_payload(
         self,
         empresa: Empresa,
@@ -279,7 +275,7 @@ class NFCeFactory:
                     "tpAmb": 1 if ambiente == "producao" else 2,
                     "finNFe": 1,  # Nota fiscal normal
                     "indFinal": 1,  # Consumidor final
-                    "indPres": 1,  # Presencial
+                    "indPres": 2,  # Presencial
                     "procEmi": 0,
                     "verProc": "1.0"
                 },
@@ -346,9 +342,8 @@ class NFCeFactory:
         try:
             logger.info("Enviando NFC-e para Nuvem Fiscal")
             
-            # Garantir que o CPF do cliente seja válido
-            if "dest" in payload["infNFe"] and "CPF" in payload["infNFe"]["dest"]:
-                payload["infNFe"]["dest"]["CPF"] = "12345678909"  # CPF válido fixo
+            # CORREÇÃO: Remover a substituição do CPF do cliente por um valor fixo
+            # Não faremos mais essa substituição, mantendo o CPF original
             
             # Usar o método post do client original
             response = self.nuvem_client.post("nfce", payload)

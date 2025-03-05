@@ -31,3 +31,4 @@
 [SQL: INSERT INTO empresas (cpf_cnpj, inscricao_estadual, inscricao_municipal, nome_razao_social, nome_fantasia, email, telefone, data_cadastro, ativo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)]
 [parameters: ('06626253000151', '123456', '654321', 'EMPREENDIMENTOS PAGUE MENOS S/A', 'FARMÁCIAS PAGUE MENOS', 'contato@paguemenos.com.br', '8532553233', '2025-03-03 14:46:51.050202', 1)]
 (Background on this error at: https://sqlalche.me/e/20/gkpj) [in C:\prototipo\backend\app\routes\empresa.py:106]
+2025-03-03 15:07:17,432 INFO: Iniciando aplicação NFCe [in C:\prototipo\backend\app\__init__.py:63]

@@ -1,7 +1,7 @@
 import qrcode
 
 # Informações da NFC-e
-chave_acesso = "31250248144666000140650010000010021987654329"  # Chave de Acesso da NFC-e
+chave_acesso = "31250348144666000140650010006841551548155036"  # Chave de Acesso da NFC-e
 versao_qrcode = "2"  # Versão do QR Code
 ambiente = "1"  # 1 para Produção, 2 para Homologação
 csc = "SEU_CODIGO_CSC"  # Código de Segurança do Contribuinte (CSC)

@@ -216,7 +216,6 @@ GET /nfce
   ]
 }
 ```
-
 ---
 
 ### 4. Cancelar NFC-e (Pendente de Implementação)
@@ -499,5 +498,5 @@ Para mais informações ou suporte, entre em contato com a equipe de desenvolvim
 
 ---
 
-**Versão da API**: 1.0  
+**Versão da API**: 1.0
 **Última atualização**: 03/03/2025

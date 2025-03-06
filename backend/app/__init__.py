@@ -46,7 +46,15 @@ def create_app(config_name=None):
     # Inicializar extensões com a aplicação
     db.init_app(app)
     migrate.init_app(app, db)
-    CORS(app)
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": [
+                "https://www.izibar.com.br",
+                "https://izibar.com.br",
+                "http://localhost:3000"
+            ]
+        }
+    })
     
     # Configurar logging
     if not os.path.exists('logs'):
